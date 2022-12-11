@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: twtr-app-fe
+spec:
+  selector:
+    matchLabels:
+      app: twtr-app-fe
+  replicas: 2
+  minReadySeconds: 15
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: twtr-app-fe
+    spec:
+      containers:
+        - image: saikiranreddykonda/frontend
+          imagePullPolicy: Always
+          name: twtr-app-fe
+          env:
+            - name: REACT_APP_API_SERVICE_URL
+              value: "http://twtr-app-be"
+          ports:
+            - containerPort: 80
